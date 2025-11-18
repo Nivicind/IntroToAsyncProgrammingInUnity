@@ -55,17 +55,30 @@ namespace RayWenderlich.WenderlichTopia
                 Destroy(placementStructure);
                 var roadProperties = roadBuildPropertiesContainer.roadBuildProperties;
                 var buildRoadTask = BuildRoadAsync(roadProperties, buildPosition, cancellationToken);
-                await buildRoadTask;
-                uiManager.NewStructureComplete(roadProperties.roadCost, buildPosition);
+                try
+                {            
+                    await buildRoadTask;
+                    uiManager.NewStructureComplete(roadProperties.roadCost, buildPosition);
+                }
+                catch
+                {
+                    Debug.LogWarning("Building House Cancelled");
+                }
             }
             else if (placementStructure.TryGetComponent(out HouseBuildPropertiesContainer houseBuildPropertiesContainer))
             {
                 Destroy(placementStructure); 
                 var houseProperties = houseBuildPropertiesContainer.houseBuildProperties;
                 var buildHouseTask = BuildHouseAsync(houseProperties, buildPosition, cancellationToken);
-                await buildHouseTask;
-                var houseCost = buildHouseTask.Result;
-                uiManager.NewStructureComplete(houseCost, buildPosition);
+                try
+                {
+                    await buildHouseTask;
+                    var houseCost = buildHouseTask.Result;
+                    uiManager.NewStructureComplete(houseCost, buildPosition);
+                }
+                catch{
+                    Debug.LogWarning("Building House Cancelled");
+                }
             }
         }
 
