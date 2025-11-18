@@ -38,8 +38,7 @@ namespace RayWenderlich.WenderlichTopia
     {
         public GameObject constructionTilePrefab;
         public UiManager uiManager;
-        public Transform levelGeometryContainer;
-        
+        public Transform levelGeometryContainer;        
         private CancellationTokenSource cancellationTokenSource;
 
         private void Start()
@@ -73,7 +72,7 @@ namespace RayWenderlich.WenderlichTopia
         private async Task BuildRoadAsync(RoadBuildProperties roadProperties, Vector3 buildPosition, CancellationToken cancellationToken)
         {
             var constructionTile = Instantiate(constructionTilePrefab, buildPosition, Quaternion.identity, levelGeometryContainer);
-            await Task.Delay(2500);
+            await Task.Delay(2500, cancellationToken);
             Destroy(constructionTile);
             Instantiate(roadProperties.completedRoadPrefab, buildPosition, Quaternion.identity, levelGeometryContainer);
         }
@@ -96,7 +95,7 @@ namespace RayWenderlich.WenderlichTopia
         private async Task<int> BuildHousePartAsync(HouseBuildProperties houseBuildProperties, GameObject housePartPrefab, Vector3 buildPosition, CancellationToken cancellationToken)
         {
             var constructionTime = houseBuildProperties.GetConstructionTime();
-            await Task.Delay(constructionTime);
+            await Task.Delay(constructionTime, cancellationToken);
             Instantiate(housePartPrefab, buildPosition, Quaternion.identity, levelGeometryContainer);
             var taskCost = constructionTime * houseBuildProperties.wage;
             return taskCost;
